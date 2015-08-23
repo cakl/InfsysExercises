@@ -29,10 +29,13 @@ select st_distance(
 
 --sphere distance (55120.6)
 select 
-	st_distance_sphere(
-		(select st_transform(the_geom,4326) from orte where gid=388), --winti 
-		(select st_transform(the_geom,4326) from orte where gid=690)  --ebikon
-	);
+  o.name, 
+  st_distance_sphere(st_transform(o.the_geom,4326),st_transform(herisau.the_geom, 4326)) 
+from 
+  orte o, 
+  (select * from orte where gid=858) herisau 
+order by 
+  herisau.the_geom <-> o.the_geom ;
 
 --spheroid distance (55152)
 select 
