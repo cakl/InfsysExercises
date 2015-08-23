@@ -15,6 +15,9 @@ CREATE TABLE loots (id int PRIMARY key, name text, geom geometry('LINESTRING', 4
 --create index on geometry object 
 CREATE INDEX in_loots_the_geom ON loots USING gist(geom);
 
+--create validation constraint on geom object
+ALTER TABLE loots ADD CONSTRAINT mygeom_check CHECK (ST_isvalid(geom));
+
 
 -- R
 
@@ -64,7 +67,10 @@ AND NOT ST_Intersects(g.the_geom, z.the_geom);
 -- ST_Crosses — Returns TRUE if the supplied geometries have some, but not all, interior points in common
 SELECT g.name FROM gemeinden g, fluesse f WHERE f.name = 'Emme'  AND ST_Crosses(f.the_geom, g.the_geom);
 
+-- ST_Equals — Returns true if the given geometries represent the same geometry
+-- ST_Disjoint — Returns TRUE if the Geometries do not "spatially intersect" - if they do not share any space together.
 -- ST_Contains — Returns true if and only if no points of B lie in the exterior of A, and at least one point of the interior of B lies in the interior of A.
+-- ST_Overlaps — Returns TRUE if the Geometries share space, are of the same dimension, but are not completely contained by each other.
 -- ST_Union — Returns a geometry that represents the point set union of the Geometries.
 -- ST_Centroid — Returns the geometric center of a geometry.
 -- ST_Difference — Returns a geometry that represents that part of geometry A that does not intersect with geometry B.
