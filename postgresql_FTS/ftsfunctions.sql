@@ -2,3 +2,5 @@
 select to_tsvector('fat cats ate rats and I hate these kind of cats');
 -- query on tokens with boolean result TRUE
 select to_tsvector('fat cats ate rats') @@ to_tsquery('cat & rat');
+-- more complex to_tsquery
+select to_tsvector('german', 'Ich würz den ganzen Tag und ich würz die ganze Nacht') @@ to_tsquery('würzen|(Tag & Nacht)');

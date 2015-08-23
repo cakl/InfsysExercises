@@ -48,6 +48,10 @@ Triggers:
 select docid from fulltextsearch where content_tsv_gin @@ to_tsquery('mistress');
 
 -- perform query with rank
+-- ts_rank([ weights float4[], ] vector tsvector, query tsquery [, normalization integer ]) returns float4
+-- Ranks vectors based on the frequency of their matching lexemes.
+-- ts_rank_cd([ weights float4[], ] vector tsvector, query tsquery [, normalization integer ]) returns float4
+-- This function computes the cover density ranking for the given document vector and query [...]
 SELECT id, left(content,40), ts_rank_cd(content_tsv_gin, query) as rank, ts_rank_cd(content_tsv_gin, query, 32 /* rank/(rank+1)
 */) AS normalized_rank FROM FullTextSearch, to_tsquery('wonderful | good'
 ) query WHERE query @@ content_tsv_gin
