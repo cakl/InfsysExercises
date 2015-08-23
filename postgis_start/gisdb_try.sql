@@ -39,16 +39,16 @@ select
 		'SPHEROID["Bessel 1841",6377397.155,299.1528128]'
 );
 
--- surface (4), (alle gemeinden mit A > 100km^2) 
+-- ST_AREA: surface (4), (alle gemeinden mit A > 100km^2) 
 select st_area(ST_geomfromtext('POLYGON((0 0, 0 2, 2 2, 2 0, 0 0))'));
 select name, (ST_Area(geom) / 1000000) as surface from gemeinden where (ST_Area(geom) / 1000000) > 100 order by st_area(geom) des
 c;
 
--- st_touches (freienbach, eschenbach...)
+-- ST_TOUCHES (freienbach, eschenbach...)
 select g.name from gemeinden g, (select * from gemeinden where gid=120)rapperswil where st_touches(g.geom, rapperswil.geom) = '1'
 ;
 
--- st_dwithin (alle orte 10km um HSR)
+-- ST_DWithin (alle orte 10km um HSR)
 -- ST_DWithin — Returns true if the geometries are within the specified distance of one another.
 select name from orte where st_dwithin(orte.the_geom, ST_Geomfromtext('POINT(704472 231216)', 21781), 10000) = '1';
 
@@ -64,5 +64,11 @@ AND NOT ST_Intersects(g.the_geom, z.the_geom);
 -- ST_Crosses — Returns TRUE if the supplied geometries have some, but not all, interior points in common
 SELECT g.name FROM gemeinden g, fluesse f WHERE f.name = 'Emme'  AND ST_Crosses(f.the_geom, g.the_geom);
 
---summary (MultiPolygon[BS] with 1 elements Polygon[S] with 1 rings, ring 0 has 5 points)
+-- ST_Contains — Returns true if and only if no points of B lie in the exterior of A, and at least one point of the interior of B lies in the interior of A.
+-- ST_Union — Returns a geometry that represents the point set union of the Geometries.
+-- ST_Centroid — Returns the geometric center of a geometry.
+-- ST_Difference — Returns a geometry that represents that part of geometry A that does not intersect with geometry B.
+-- ST_SymDifference — Returns a geometry that represents the portions of A and B that do not intersect.
+
+--ST_Summary (MultiPolygon[BS] with 1 elements Polygon[S] with 1 rings, ring 0 has 5 points)
 select st_summary(geom) from gemeinden where gid = 1;
